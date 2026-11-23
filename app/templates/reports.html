@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block body %}
+<h1>Management reports</h1><p class="sub">Calculated live from the database</p>
+<h2>Upcoming appointments</h2><table><tr><th>When</th><th>Pet</th><th>Owner</th><th>Veterinarian</th><th>Reason</th></tr>
+{% for a in upcoming %}<tr><td><a href="{{ url_for('appointment_detail', aid=a.appointment_id) }}">{{ a.appt_datetime }}</a></td><td>{{ a.pet_name }}</td><td>{{ a.owner }}</td><td>{{ a.vet }}</td><td>{{ a.reason }}</td></tr>{% else %}<tr><td colspan="5" class="empty">None.</td></tr>{% endfor %}</table>
+<div class="grid g2"><div><h2>Revenue by month (payments received)</h2>{% set mx = (revenue|map(attribute='total')|max) if revenue else 1 %}
+<table><tr><th>Month</th><th class="num">Payments</th><th class="num">Collected</th></tr>{% for r in revenue %}<tr><td>{{ r.month }}</td><td class="num">{{ r.payments }}</td><td class="num">{{ r.total|money }}</td></tr>{% endfor %}</table>
+<div class="card bars" style="margin-top:10px">{% for r in revenue %}<div><span>{{ r.month }}</span><i style="width:{{ (r.total / mx * 100)|round|int }}%"></i></div>{% endfor %}</div></div>
+<div><h2>Most common treatments</h2><table><tr><th>Service</th><th class="num">Times</th><th class="num">Billed</th></tr>{% for c in common %}<tr><td>{{ c.service_name }}</td><td class="num">{{ c.times }}</td><td class="num">{{ c.revenue|money }}</td></tr>{% endfor %}</table></div></div>
+<div class="grid g2"><div><h2>Outstanding invoices</h2><table><tr><th>#</th><th>Owner</th><th>Due</th><th class="num">Balance</th></tr>{% for u in unpaid %}<tr><td><a href="{{ url_for('invoice_detail', iid=u.invoice_id) }}">{{ u.invoice_id }}</a></td><td>{{ u.owner }}</td><td>{{ u.due_date }}</td><td class="num">{{ u.balance_due|money }}</td></tr>{% else %}<tr><td colspan="4" class="empty">All paid.</td></tr>{% endfor %}</table></div>
+<div><h2>Completed visits by veterinarian</h2><table><tr><th>Veterinarian</th><th class="num">Visits</th></tr>{% for v in vets %}<tr><td>{{ v.vet }}</td><td class="num">{{ v.visits }}</td></tr>{% endfor %}</table></div></div>
+{% endblock %}

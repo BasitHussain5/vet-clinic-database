@@ -1,0 +1,26 @@
+digraph C{graph[rankdir=TB,nodesep=0.7,ranksep=0.9,pad=0.3,fontname="Helvetica",bgcolor=white];node[shape=box,style="rounded,filled",fillcolor="#e6f2ef",color="#1f7a6d",penwidth=1.8,fontname="Helvetica-Bold",fontsize=14,margin="0.25,0.14"];edge[dir=none,fontname="Helvetica",fontsize=11,color="#444444",fontcolor="#333333",labelfontsize=11,labeldistance=1.8];
+"Owner";
+"Pet";
+"Breed / Species";
+"Veterinarian";
+"Appointment";
+"Service";
+"Treatment";
+"Medication";
+"Prescription";
+"Invoice";
+"Payment";
+"Owner" -> "Pet" [label=<<I> owns </I>>,taillabel="1",headlabel="0..*"];
+"Breed / Species" -> "Pet" [label=<<I> classifies </I>>,taillabel="1",headlabel="0..*"];
+"Pet" -> "Appointment" [label=<<I> is seen in </I>>,taillabel="1",headlabel="0..*"];
+"Veterinarian" -> "Appointment" [label=<<I> conducts </I>>,taillabel="1",headlabel="0..*"];
+"Appointment" -> "Treatment" [label=<<I> includes </I>>,taillabel="1",headlabel="0..*"];
+"Service" -> "Treatment" [label=<<I> is performed as </I>>,taillabel="1",headlabel="0..*"];
+"Appointment" -> "Prescription" [label=<<I> results in </I>>,taillabel="1",headlabel="0..*"];
+"Medication" -> "Prescription" [label=<<I> is prescribed in </I>>,taillabel="1",headlabel="0..*"];
+"Appointment" -> "Invoice" [label=<<I> is billed on </I>>,taillabel="1",headlabel="0..1"];
+"Owner" -> "Invoice" [label=<<I> is billed to </I>>,taillabel="1",headlabel="0..*"];
+"Invoice" -> "Treatment" [label=<<I> charges for </I>>,taillabel="0..1",headlabel="0..*"];
+"Invoice" -> "Prescription" [label=<<I> charges for </I>>,taillabel="0..1",headlabel="0..*"];
+"Invoice" -> "Payment" [label=<<I> is settled by </I>>,taillabel="1",headlabel="0..*"];
+}

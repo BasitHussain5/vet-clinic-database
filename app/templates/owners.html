@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% block body %}
+<div class="bar"><h1>Owners</h1><form class="sp bar" style="margin:0"><input name="q" placeholder="Search name, phone, email" value="{{ s }}"><button class="btn sec">Search</button></form><a class="btn" href="{{ url_for('owner_form') }}">+ New owner</a></div>
+<table><tr><th>Name</th><th>Phone</th><th>Email</th><th>City</th><th class="num">Pets</th></tr>
+{% for o in rows %}<tr><td><a href="{{ url_for('owner_detail', oid=o.owner_id) }}">{{ o.last_name }}, {{ o.first_name }}</a></td><td>{{ o.phone }}</td><td>{{ o.email or '' }}</td><td>{{ o.city or '' }}</td><td class="num">{{ o.pets }}</td></tr>
+{% else %}<tr><td colspan="5" class="empty">No owners found.</td></tr>{% endfor %}</table>{% endblock %}

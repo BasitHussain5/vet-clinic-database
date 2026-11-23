@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% block body %}
+<h1>Dashboard</h1><p class="sub">Front-desk overview</p>
+<div class="grid g4"><div class="stat"><b>{{ stats.owners }}</b><span>Pet owners</span></div><div class="stat"><b>{{ stats.pets }}</b><span>Active pets</span></div>
+<div class="stat"><b>{{ stats.upcoming }}</b><span>Upcoming appointments</span></div><div class="stat"><b>{{ stats.outstanding|money }}</b><span>Outstanding balances</span></div></div>
+<div class="bar" style="margin-top:20px"><a class="btn" href="{{ url_for('appointment_new') }}">+ Schedule appointment</a><a class="btn sec" href="{{ url_for('owner_form') }}">+ New owner</a><a class="btn sec" href="{{ url_for('pet_form') }}">+ New pet</a></div>
+<h2>Next appointments</h2>
+<table><tr><th>When</th><th>Pet</th><th>Veterinarian</th><th>Reason</th></tr>
+{% for a in upcoming %}<tr><td><a href="{{ url_for('appointment_detail', aid=a.appointment_id) }}">{{ a.appt_datetime }}</a></td><td>{{ a.pet_name }}</td><td>Dr. {{ a.vet }}</td><td>{{ a.reason }}</td></tr>
+{% else %}<tr><td colspan="4" class="empty">No upcoming appointments.</td></tr>{% endfor %}</table>
+{% endblock %}

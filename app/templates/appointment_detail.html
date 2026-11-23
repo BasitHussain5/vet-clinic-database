@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% block body %}
+<div class="bar"><h1>Visit #{{ a.appointment_id }}: {{ a.pet_name }}</h1><span class="tag {{ a.status }}">{{ a.status }}</span><span class="sp"></span>
+<a class="btn sec" href="{{ url_for('pet_detail', pid=a.pet_id) }}">Pet history</a></div>
+<div class="grid g2"><div class="card"><dl class="kv"><dt>When</dt><dd>{{ a.appt_datetime }} ({{ a.duration_min }} min)</dd><dt>Veterinarian</dt><dd>{{ a.vet_name }}</dd>
+<dt>Owner</dt><dd><a href="{{ url_for('owner_detail', oid=a.owner_id) }}">{{ a.owner }}</a></dd><dt>Reason</dt><dd>{{ a.reason }}</dd></dl></div>
+<form method="post" action="{{ url_for('appointment_update', aid=a.appointment_id) }}" class="card" style="margin:0">
+<label style="margin-top:0">Status</label><select name="status">{% for x in ['Scheduled','Completed','Cancelled','No-Show'] %}<option {{ 'selected' if a.status==x }}>{{ x }}</option>{% endfor %}</select>
+<label>Diagnosis</label><input name="diagnosis" value="{{ a.diagnosis or '' }}"><label>Notes</label><input name="notes" value="{{ a.notes or '' }}"><p><button class="btn">Update visit</button></p></form></div>
+<h2>Treatments performed</h2><table><tr><th>Service</th><th>Notes</th><th class="num">Catalog price</th></tr>
+{% for t in treatments %}<tr><td>{{ t.service_name }}</td><td>{{ t.notes or '' }}</td><td class="num">{{ t.standard_price|money }}</td></tr>{% else %}<tr><td colspan="3" class="empty">None recorded.</td></tr>{% endfor %}</table>
+<form method="post" action="{{ url_for('add_treatment', aid=a.appointment_id) }}" class="bar noprint" style="margin-top:10px"><select name="service_id" required><option value="">Add treatment...</option>{% for s in services %}<option value="{{ s.service_id }}">{{ s.category }}: {{ s.service_name }} ({{ s.standard_price|money }})</option>{% endfor %}</select><input name="notes" placeholder="Notes (optional)"><button class="btn sec">Record treatment</button></form>
+<h2>Prescriptions</h2><table><tr><th>Medication</th><th>Directions</th><th class="num">Days</th><th class="num">Qty</th><th class="num">Refills</th></tr>
+{% for r in rx %}<tr><td>{{ r.med }}</td><td>{{ r.dosage_directions }}</td><td class="num">{{ r.duration_days or '' }}</td><td class="num">{{ r.quantity_dispensed }}</td><td class="num">{{ r.refills_allowed }}</td></tr>{% else %}<tr><td colspan="5" class="empty">None issued.</td></tr>{% endfor %}</table>
+<form method="post" action="{{ url_for('add_prescription', aid=a.appointment_id) }}" class="card noprint" style="margin-top:10px"><div class="row">
+<div><label style="margin-top:0">Medication</label><select name="medication_id" required><option value="">Select...</option>{% for m in meds %}<option value="{{ m.medication_id }}">{{ m.medication_name }} {{ m.strength }} ({{ m.dosage_form }})</option>{% endfor %}</select></div>
+<div><label style="margin-top:0">Directions</label><input name="dosage_directions" required></div>
+<div><label>Duration (days)</label><input type="number" name="duration_days" min="1"></div><div><label>Quantity</label><input type="number" name="quantity_dispensed" min="1" required></div>
+<div><label>Refills</label><input type="number" name="refills_allowed" min="0" max="12" value="0"></div></div><p><button class="btn sec">Issue prescription</button></p></form>
+<h2>Billing</h2>{% if inv %}<p>Invoice <a href="{{ url_for('invoice_detail', iid=inv.invoice_id) }}">#{{ inv.invoice_id }}</a> - {{ inv.total_amount|money }} - <span class="tag {{ inv.payment_status.replace(' ','-') }}">{{ inv.payment_status }}</span></p>{% endif %}
+<form method="post" action="{{ url_for('make_invoice', aid=a.appointment_id) }}"><button class="btn">{{ 'Add unbilled items to invoice' if inv else 'Generate invoice' }}</button></form>{% endblock %}

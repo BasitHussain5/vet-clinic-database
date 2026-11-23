@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block body %}
+<h1>{{ 'Edit owner' if o and o['owner_id'] is defined else 'New owner' }}</h1><p class="sub">Required: first name, last name, phone</p>
+<form method="post" class="card"><div class="row">
+<div><label>First name *</label><input name="first_name" value="{{ o['first_name'] if o else '' }}" required></div>
+<div><label>Last name *</label><input name="last_name" value="{{ o['last_name'] if o else '' }}" required></div>
+<div><label>Phone *</label><input name="phone" value="{{ o['phone'] if o else '' }}" required></div>
+<div><label>Email</label><input type="email" name="email" value="{{ o['email'] or '' if o else '' }}"></div>
+<div><label>Street</label><input name="street" value="{{ o['street'] or '' if o else '' }}"></div>
+<div><label>City</label><input name="city" value="{{ o['city'] or '' if o else '' }}"></div>
+<div><label>State</label><input name="state" maxlength="2" value="{{ o['state'] or '' if o else '' }}"></div>
+<div><label>ZIP</label><input name="zip_code" value="{{ o['zip_code'] or '' if o else '' }}"></div></div>
+<p><button class="btn">Save</button> <a class="btn sec" href="{{ url_for('owners') }}">Cancel</a></p></form>{% endblock %}

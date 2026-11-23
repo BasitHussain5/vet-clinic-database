@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block body %}
+<div class="bar"><h1>{{ o.first_name }} {{ o.last_name }}</h1><span class="sp"></span>
+<a class="btn sec" href="{{ url_for('owner_form', oid=o.owner_id) }}">Edit</a>
+<form class="inline" method="post" action="{{ url_for('owner_delete', oid=o.owner_id) }}" onsubmit="return confirm('Delete this owner?')"><button class="btn danger">Delete</button></form></div>
+<div class="card"><dl class="kv"><dt>Phone</dt><dd>{{ o.phone }}</dd><dt>Email</dt><dd>{{ o.email or '-' }}</dd>
+<dt>Address</dt><dd>{{ o.street or '' }}{% if o.city %}, {{ o.city }}, {{ o.state }} {{ o.zip_code }}{% endif %}</dd><dt>Client since</dt><dd>{{ o.registered_date }}</dd></dl></div>
+<div class="bar"><h2 style="margin:0">Pets</h2><a class="btn sec sp" href="{{ url_for('pet_form', owner_id=o.owner_id) }}">+ Add pet</a></div>
+<table><tr><th>Name</th><th>Species / breed</th><th>Sex</th><th>Status</th></tr>
+{% for p in pets %}<tr><td><a href="{{ url_for('pet_detail', pid=p.pet_id) }}">{{ p.pet_name }}</a></td><td>{{ p.species_name }} / {{ p.breed_name }}</td><td>{{ p.sex }}</td><td><span class="tag {{ p.status }}">{{ p.status }}</span></td></tr>
+{% else %}<tr><td colspan="4" class="empty">No pets registered.</td></tr>{% endfor %}</table>
+<h2>Invoices</h2><table><tr><th>#</th><th>Date</th><th class="num">Total</th><th class="num">Balance</th><th>Status</th></tr>
+{% for i in invs %}<tr><td><a href="{{ url_for('invoice_detail', iid=i.invoice_id) }}">{{ i.invoice_id }}</a></td><td>{{ i.invoice_date }}</td><td class="num">{{ i.total_amount|money }}</td><td class="num">{{ i.balance_due|money }}</td><td><span class="tag {{ i.payment_status.replace(' ','-') }}">{{ i.payment_status }}</span></td></tr>
+{% else %}<tr><td colspan="5" class="empty">No invoices.</td></tr>{% endfor %}</table>{% endblock %}

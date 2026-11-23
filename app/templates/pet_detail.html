@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block body %}
+<div class="bar"><h1>{{ p.pet_name }}</h1><span class="tag {{ p.status }}">{{ p.status }}</span><span class="sp"></span>
+<a class="btn" href="{{ url_for('appointment_new', pet_id=p.pet_id) }}">Schedule visit</a><a class="btn sec" href="{{ url_for('pet_form', pid=p.pet_id) }}">Edit</a>
+<form class="inline" method="post" action="{{ url_for('pet_delete', pid=p.pet_id) }}" onsubmit="return confirm('Delete this pet?')"><button class="btn danger">Delete</button></form></div>
+<div class="card"><dl class="kv"><dt>Species / breed</dt><dd>{{ p.species_name }} / {{ p.breed_name }}</dd><dt>Sex</dt><dd>{{ p.sex }}</dd><dt>Birth date</dt><dd>{{ p.birth_date or '-' }}</dd>
+<dt>Weight</dt><dd>{{ p.weight_kg or '-' }} kg</dd><dt>Owner</dt><dd><a href="{{ url_for('owner_detail', oid=p.owner_id) }}">{{ p.owner_name }}</a></dd></dl></div>
+<h2>Medical history</h2>
+{% for a, t, r in history %}<div class="hist"><h3><a href="{{ url_for('appointment_detail', aid=a.appointment_id) }}">{{ a.appt_datetime[:10] }}</a> - {{ a.reason }} <span class="tag {{ a.status }}">{{ a.status }}</span></h3>
+<small>{{ a.vet }}{% if a.diagnosis %} &middot; Diagnosis: {{ a.diagnosis }}{% endif %}</small>
+{% if t %}<div><b>Treatments:</b> {% for x in t %}{{ x.service_name }}{{ ' (' ~ x.notes ~ ')' if x.notes }}{{ '; ' if not loop.last }}{% endfor %}</div>{% endif %}
+{% if r %}<div><b>Prescriptions:</b> {% for x in r %}{{ x.med }} - {{ x.dosage_directions }} (qty {{ x.qty }}){{ '; ' if not loop.last }}{% endfor %}</div>{% endif %}</div>
+{% else %}<p class="empty">No visits recorded yet.</p>{% endfor %}{% endblock %}

@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block body %}
+<div class="bar"><h1>Pets</h1><form class="sp bar" style="margin:0"><input name="q" placeholder="Search pet, owner, species, breed" value="{{ s }}"><button class="btn sec">Search</button></form><a class="btn" href="{{ url_for('pet_form') }}">+ New pet</a></div>
+<table><tr><th>Pet</th><th>Species / breed</th><th>Sex</th><th>Born</th><th>Owner</th><th>Status</th></tr>
+{% for p in rows %}<tr><td><a href="{{ url_for('pet_detail', pid=p.pet_id) }}">{{ p.pet_name }}</a></td><td>{{ p.species_name }} / {{ p.breed_name }}</td><td>{{ p.sex }}</td><td>{{ p.birth_date or '' }}</td>
+<td><a href="{{ url_for('owner_detail', oid=p.owner_id) }}">{{ p.owner_name }}</a></td><td><span class="tag {{ p.status }}">{{ p.status }}</span></td></tr>
+{% else %}<tr><td colspan="6" class="empty">No pets found.</td></tr>{% endfor %}</table>{% endblock %}

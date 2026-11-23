@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% block body %}
+<div class="bar"><h1>Appointment schedule</h1><a class="btn sp" href="{{ url_for('appointment_new') }}">+ Schedule appointment</a></div>
+<form class="bar"><input name="q" placeholder="Search pet, owner, reason, diagnosis" value="{{ s }}" style="min-width:260px">
+<select name="status"><option value="">All statuses</option>{% for x in ['Scheduled','Completed','Cancelled','No-Show'] %}<option {{ 'selected' if status==x }}>{{ x }}</option>{% endfor %}</select>
+<select name="vet"><option value="">All veterinarians</option>{% for v in vets %}<option value="{{ v.vet_id }}" {{ 'selected' if vet==v.vet_id|string }}>{{ v.name }}</option>{% endfor %}</select><button class="btn sec">Filter</button></form>
+<table><tr><th>Date / time</th><th>Pet</th><th>Owner</th><th>Veterinarian</th><th>Reason</th><th>Status</th></tr>
+{% for a in rows %}<tr><td><a href="{{ url_for('appointment_detail', aid=a.appointment_id) }}">{{ a.appt_datetime }}</a></td><td>{{ a.pet_name }}</td><td>{{ a.owner }}</td><td>{{ a.vet_name }}</td><td>{{ a.reason }}</td><td><span class="tag {{ a.status }}">{{ a.status }}</span></td></tr>
+{% else %}<tr><td colspan="6" class="empty">No appointments match.</td></tr>{% endfor %}</table>{% endblock %}

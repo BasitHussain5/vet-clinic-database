@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% block body %}
+{% set sel_o = (p['owner_id'] if p else pre)|string %}
+<h1>{{ 'Edit pet' if p and p['pet_id'] is defined else 'New pet' }}</h1><p class="sub">Every pet has exactly one primary owner.</p>
+<form method="post" class="card"><div class="row">
+<div><label>Primary owner *</label><select name="owner_id" required><option value="">Select...</option>{% for o in owners %}<option value="{{ o.owner_id }}" {{ 'selected' if o.owner_id|string==sel_o }}>{{ o.name }}</option>{% endfor %}</select></div>
+<div><label>Species / breed *</label><select name="breed_id" required><option value="">Select...</option>{% for b in breeds %}<option value="{{ b.breed_id }}" {{ 'selected' if p and b.breed_id|string==p['breed_id']|string }}>{{ b.name }}</option>{% endfor %}</select></div>
+<div><label>Name *</label><input name="pet_name" value="{{ p['pet_name'] if p else '' }}" required></div>
+<div><label>Sex *</label><select name="sex"><option value="M" {{ 'selected' if p and p['sex']=='M' }}>Male</option><option value="F" {{ 'selected' if p and p['sex']=='F' }}>Female</option></select></div>
+<div><label>Birth date</label><input type="date" name="birth_date" value="{{ p['birth_date'] or '' if p else '' }}"></div>
+<div><label>Color</label><input name="color" value="{{ p['color'] or '' if p else '' }}"></div>
+<div><label>Weight (kg)</label><input type="number" step="0.01" name="weight_kg" value="{{ p['weight_kg'] or '' if p else '' }}"></div>
+<div><label>Microchip no.</label><input name="microchip_no" value="{{ p['microchip_no'] or '' if p else '' }}"></div>
+<div><label>Status</label><select name="status">{% for s in ['Active','Deceased','Transferred'] %}<option {{ 'selected' if p and p['status']==s }}>{{ s }}</option>{% endfor %}</select></div></div>
+<p><button class="btn">Save</button> <a class="btn sec" href="{{ url_for('pets') }}">Cancel</a></p></form>{% endblock %}

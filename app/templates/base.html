@@ -1,0 +1,8 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}Paws &amp; Claws Vet Clinic{% endblock %}</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head><body>
+<nav><span class="logo">Paws &amp; Claws Vet Clinic</span>
+<a href="{{ url_for('dashboard') }}">Dashboard</a><a href="{{ url_for('owners') }}">Owners</a><a href="{{ url_for('pets') }}">Pets</a>
+<a href="{{ url_for('appointments') }}">Appointments</a><a href="{{ url_for('invoices') }}">Invoices</a><a href="{{ url_for('reports') }}">Reports</a>
+<form action="{{ url_for('search') }}"><input name="q" placeholder="Search owners, pets, visits" value="{{ request.args.get('q','') if request.endpoint=='search' else '' }}"><button class="btn sec" style="padding:5px 10px">Search</button></form></nav>
+<main>{% with m = get_flashed_messages(with_categories=true) %}{% for c, t in m %}<div class="flash {{ c }}">{{ t }}</div>{% endfor %}{% endwith %}
+{% block body %}{% endblock %}</main></body></html>
